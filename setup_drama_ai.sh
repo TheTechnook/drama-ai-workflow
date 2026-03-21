@@ -24,8 +24,20 @@ echo -e "${GREEN}  DRAMA AI STUDIO - Full Production Pipeline Setup${NC}"
 echo "  ============================================================"
 echo ""
 
-WORKSPACE="/workspace"
-COMFY_DIR="$WORKSPACE/ComfyUI"
+# Auto-detect platform
+if [ -d "/teamspace/studios/this_studio" ]; then
+    echo -e "${GREEN}  Platform: Lightning AI detected!${NC}"
+    COMFY_DIR="/teamspace/studios/this_studio"
+    WORKSPACE="/teamspace/studios/this_studio"
+elif [ -d "/workspace" ]; then
+    echo -e "${GREEN}  Platform: Vast.ai detected!${NC}"
+    WORKSPACE="/workspace"
+    COMFY_DIR="$WORKSPACE/ComfyUI"
+else
+    WORKSPACE="/tmp"
+    COMFY_DIR="$WORKSPACE/ComfyUI"
+fi
+
 MODELS_DIR="$COMFY_DIR/models"
 NODES_DIR="$COMFY_DIR/custom_nodes"
 
@@ -148,11 +160,31 @@ network_mode: personal_cloud
 EOF
 echo -e "${GREEN}✅ Security fixed!${NC}"
 
-# ─── STEP 6: GENERATE WORKFLOW ───
-echo -e "${YELLOW}[6/7] Downloading and generating master workflow...${NC}"
-wget -q -O /tmp/drama_workflow.py "https://raw.githubusercontent.com/TheTechnook/drama-ai-workflow/main/create_drama_workflow.py"
-python /tmp/drama_workflow.py
-echo -e "${GREEN}✅ Master workflow ready!${NC}"
+# ─── STEP 6: DOWNLOAD WORKFLOW + FLUX CLIP MODELS ───
+echo -e "${YELLOW}[6/7] Downloading master workflow and FLUX CLIP models...${NC}"
+mkdir -p $COMFY_DIR/user/default/workflows
+wget -q -O $COMFY_DIR/user/default/workflows/DRAMA_MASTER_WORKFLOW.json "https://raw.githubusercontent.com/TheTechnook/drama-ai-workflow/main/DRAMA_MASTER_WORKFLOW.json"
+
+mkdir -p $MODELS_DIR/clip
+download_model \
+    "FLUX CLIP L" \
+    "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/clip_l.safetensors" \
+    "$MODELS_DIR/clip/clip_l.safetensors" \
+    200
+
+download_model \
+    "FLUX T5XXL fp8" \
+    "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors" \
+    "$MODELS_DIR/clip/t5xxl_fp8_e4m3fn.safetensors" \
+    4000
+
+download_model \
+    "FLUX VAE" \
+    "https://huggingface.co/Kijai/flux-fp8/resolve/main/flux-vae-bf16.safetensors" \
+    "$MODELS_DIR/vae/flux-vae-bf16.safetensors" \
+    100
+
+echo -e "${GREEN}✅ Workflow and FLUX models ready!${NC}"
 
 # ─── STEP 7: INSTALL NGROK + START ───
 echo -e "${YELLOW}[7/7] Installing ngrok...${NC}"
