@@ -1,0 +1,1123 @@
+{
+  "id": "41371f20-6232-4964-9b4f-3fb6e25ba43b",
+  "revision": 0,
+  "last_node_id": 20,
+  "last_link_id": 20,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "DualCLIPLoader",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        320,
+        130
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "slot_index": 0,
+          "links": [
+            1,
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DualCLIPLoader"
+      },
+      "widgets_values": [
+        "clip_l.safetensors",
+        "t5xxl_fp8_e4m3fn.safetensors",
+        "flux",
+        "default"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPTextEncodeFlux",
+      "pos": [
+        370,
+        0
+      ],
+      "size": [
+        500,
+        166
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncodeFlux"
+      },
+      "widgets_values": [
+        "anime style, jujutsu kaisen art, teenage boy, 17 years old, dark skin, short spiky black hair, school uniform, sharp clean lines, expressive eyes, cinematic lighting, masterpiece",
+        "anime style, jujutsu kaisen art, teenage boy, 17 years old, dark skin, short spiky black hair, school uniform, sharp clean lines, expressive eyes, cinematic lighting, masterpiece",
+        3.5
+      ]
+    },
+    {
+      "id": 4,
+      "type": "EmptyLatentImage",
+      "pos": [
+        -127.99662837388985,
+        322.8528459243077
+      ],
+      "size": [
+        300,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyLatentImage"
+      },
+      "widgets_values": [
+        768,
+        1024,
+        1
+      ]
+    },
+    {
+      "id": 7,
+      "type": "VAELoader",
+      "pos": [
+        -15.161489856816331,
+        344.491637461011
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "slot_index": 0,
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux-vae-bf16.safetensors"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [
+        1320,
+        0
+      ],
+      "size": [
+        200,
+        100
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 6
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            8,
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 9,
+      "type": "SaveImage",
+      "pos": [
+        1570,
+        0
+      ],
+      "size": [
+        300,
+        270
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 8
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "anime_character"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "WanVideoVAELoader",
+      "pos": [
+        -361.5432196625429,
+        878.5585377729229
+      ],
+      "size": [
+        320,
+        130
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "compile_args",
+          "shape": 7,
+          "type": "WANCOMPILEARGS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "vae",
+          "type": "WANVAE",
+          "slot_index": 0,
+          "links": [
+            16,
+            30
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WanVideoVAELoader"
+      },
+      "widgets_values": [
+        "Wan2_1_VAE_bf16.safetensors",
+        "bf16",
+        false,
+        false
+      ]
+    },
+    {
+      "id": 5,
+      "type": "KSampler",
+      "pos": [
+        920,
+        0
+      ],
+      "size": [
+        350,
+        280
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 20
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 3
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 4
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        3.5,
+        "euler",
+        "simple",
+        1
+      ]
+    },
+    {
+      "id": 12,
+      "type": "WanVideoModelLoader",
+      "pos": [
+        -776.7347880492055,
+        546.052564530788
+      ],
+      "size": [
+        350,
+        318
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "compile_args",
+          "shape": 7,
+          "type": "WANCOMPILEARGS",
+          "link": null
+        },
+        {
+          "name": "block_swap_args",
+          "shape": 7,
+          "type": "BLOCKSWAPARGS",
+          "link": null
+        },
+        {
+          "name": "lora",
+          "shape": 7,
+          "type": "WANVIDLORA",
+          "link": null
+        },
+        {
+          "name": "vram_management_args",
+          "shape": 7,
+          "type": "VRAM_MANAGEMENTARGS",
+          "link": null
+        },
+        {
+          "name": "extra_model",
+          "shape": 7,
+          "type": "VACEPATH",
+          "link": null
+        },
+        {
+          "name": "fantasytalking_model",
+          "shape": 7,
+          "type": "FANTASYTALKINGMODEL",
+          "link": null
+        },
+        {
+          "name": "multitalk_model",
+          "shape": 7,
+          "type": "MULTITALKMODEL",
+          "link": null
+        },
+        {
+          "name": "fantasyportrait_model",
+          "shape": 7,
+          "type": "FANTASYPORTRAITMODEL",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "WANVIDEOMODEL",
+          "slot_index": 0,
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WanVideoModelLoader"
+      },
+      "widgets_values": [
+        "Wan2_1-T2V-14B_fp8.safetensors",
+        "bf16",
+        "fp8_e4m3fn",
+        "offload_device",
+        "sdpa",
+        "default"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "CLIPTextEncodeFlux",
+      "pos": [
+        370,
+        200
+      ],
+      "size": [
+        500,
+        166
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncodeFlux"
+      },
+      "widgets_values": [
+        "blurry, ugly, deformed, watermark, text, bad anatomy, low quality, realistic, 3d, photograph",
+        "blurry, ugly, deformed, watermark, text, bad anatomy, low quality, realistic, 3d, photograph",
+        3.5
+      ]
+    },
+    {
+      "id": 13,
+      "type": "LoadWanVideoT5TextEncoder",
+      "pos": [
+        -750.3456318191913,
+        835.906213374943
+      ],
+      "size": [
+        350,
+        130
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "wan_t5_model",
+          "type": "WANTEXTENCODER",
+          "slot_index": 0,
+          "links": [
+            13
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadWanVideoT5TextEncoder"
+      },
+      "widgets_values": [
+        "umt5-xxl-enc-fp8.safetensors",
+        "bf16",
+        "main_device",
+        "disabled"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "WanVideoDecode",
+      "pos": [
+        623.2652119507949,
+        446.0525645307882
+      ],
+      "size": [
+        300,
+        200
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "type": "WANVAE",
+          "link": 16
+        },
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WanVideoDecode"
+      },
+      "widgets_values": [
+        true,
+        272,
+        272,
+        144,
+        144,
+        "default"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "WanVideoSampler",
+      "pos": [
+        173.26521195079476,
+        446.0525645307882
+      ],
+      "size": [
+        400,
+        690
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "WANVIDEOMODEL",
+          "link": 12
+        },
+        {
+          "name": "image_embeds",
+          "type": "WANVIDIMAGE_EMBEDS",
+          "link": 11
+        },
+        {
+          "name": "text_embeds",
+          "shape": 7,
+          "type": "WANVIDEOTEXTEMBEDS",
+          "link": 14
+        },
+        {
+          "name": "samples",
+          "shape": 7,
+          "type": "LATENT",
+          "link": null
+        },
+        {
+          "name": "feta_args",
+          "shape": 7,
+          "type": "FETAARGS",
+          "link": null
+        },
+        {
+          "name": "context_options",
+          "shape": 7,
+          "type": "WANVIDCONTEXT",
+          "link": null
+        },
+        {
+          "name": "cache_args",
+          "shape": 7,
+          "type": "CACHEARGS",
+          "link": null
+        },
+        {
+          "name": "flowedit_args",
+          "shape": 7,
+          "type": "FLOWEDITARGS",
+          "link": null
+        },
+        {
+          "name": "slg_args",
+          "shape": 7,
+          "type": "SLGARGS",
+          "link": null
+        },
+        {
+          "name": "loop_args",
+          "shape": 7,
+          "type": "LOOPARGS",
+          "link": null
+        },
+        {
+          "name": "experimental_args",
+          "shape": 7,
+          "type": "EXPERIMENTALARGS",
+          "link": null
+        },
+        {
+          "name": "sigmas",
+          "shape": 7,
+          "type": "SIGMAS",
+          "link": null
+        },
+        {
+          "name": "unianimate_poses",
+          "shape": 7,
+          "type": "UNIANIMATE_POSE",
+          "link": null
+        },
+        {
+          "name": "fantasytalking_embeds",
+          "shape": 7,
+          "type": "FANTASYTALKING_EMBEDS",
+          "link": null
+        },
+        {
+          "name": "uni3c_embeds",
+          "shape": 7,
+          "type": "UNI3C_EMBEDS",
+          "link": null
+        },
+        {
+          "name": "multitalk_embeds",
+          "shape": 7,
+          "type": "MULTITALK_EMBEDS",
+          "link": null
+        },
+        {
+          "name": "freeinit_args",
+          "shape": 7,
+          "type": "FREEINITARGS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            15
+          ]
+        },
+        {
+          "name": "denoised_samples",
+          "type": "LATENT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WanVideoSampler"
+      },
+      "widgets_values": [
+        28,
+        6,
+        5,
+        42,
+        0,
+        true,
+        "unipc",
+        0,
+        1,
+        false,
+        "comfy",
+        0,
+        -1,
+        false
+      ]
+    },
+    {
+      "id": 18,
+      "type": "GeekyKokoroTTS",
+      "pos": [
+        0,
+        1200
+      ],
+      "size": [
+        500,
+        252
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 0,
+          "links": [
+            18
+          ]
+        },
+        {
+          "name": "text_processed",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GeekyKokoroTTS"
+      },
+      "widgets_values": [
+        "In every school there is one name that echoes through every hallway. One person who moves differently. Who speaks differently. Who lives differently. His name is Jay. And when Jay walks in... everyone notices.\n",
+        "🇺🇸 🚺 Nova ⭐",
+        1,
+        1,
+        24000,
+        "🇺🇸 🚺 Bella 🔥",
+        0.5
+      ]
+    },
+    {
+      "id": 6,
+      "type": "UNETLoader",
+      "pos": [
+        0,
+        180
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "slot_index": 0,
+          "links": [
+            20
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "flux1-dev-fp8.safetensors",
+        "fp8_e4m3fn"
+      ]
+    },
+    {
+      "id": 20,
+      "type": "WanVideoEmptyEmbeds",
+      "pos": [
+        400,
+        950
+      ],
+      "size": [
+        300,
+        150
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "control_embeds",
+          "shape": 7,
+          "type": "WANVIDIMAGE_EMBEDS",
+          "link": null
+        },
+        {
+          "name": "extra_latents",
+          "shape": 7,
+          "type": "LATENT",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image_embeds",
+          "type": "WANVIDIMAGE_EMBEDS",
+          "slot_index": 0,
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WanVideoEmptyEmbeds"
+      },
+      "widgets_values": [
+        832,
+        480,
+        49
+      ]
+    },
+    {
+      "id": 19,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        1051.2974838630223,
+        448.2120920145216
+      ],
+      "size": [
+        350,
+        538.3846153846154
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 17
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 18
+        },
+        {
+          "name": "meta_batch",
+          "shape": 7,
+          "type": "VHS_BatchManager",
+          "link": null
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "anime_drama",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": true,
+        "save_output": "default",
+        "videopreview": {
+          "hidden": false,
+          "paused": true,
+          "params": {
+            "filename": "anime_drama_00005-audio.mp4",
+            "subfolder": "",
+            "type": "output",
+            "format": "video/h264-mp4",
+            "frame_rate": 24,
+            "workflow": "anime_drama_00005.png",
+            "fullpath": "/workspace/ComfyUI/output/anime_drama_00005-audio.mp4"
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "WanVideoTextEncode",
+      "pos": [
+        -376.7347880492051,
+        546.052564530788
+      ],
+      "size": [
+        500,
+        234
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "t5",
+          "shape": 7,
+          "type": "WANTEXTENCODER",
+          "link": 13
+        },
+        {
+          "name": "model_to_offload",
+          "shape": 7,
+          "type": "WANVIDEOMODEL",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text_embeds",
+          "type": "WANVIDEOTEXTEMBEDS",
+          "slot_index": 0,
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WanVideoTextEncode"
+      },
+      "widgets_values": [
+        "anime style jujutsu kaisen, group of teenage boys riding bicycles, urban neighborhood, colorful graffiti walls, basketball court in background, clothes hanging between buildings, golden sunset lighting, dynamic motion blur, friends laughing, cinematic wide shot, masterpiece, best quality, vibrant colors\n",
+        "blurry, ugly, watermark, text, deformed, realistic",
+        true,
+        false,
+        "gpu"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "CLIP"
+    ],
+    [
+      2,
+      1,
+      0,
+      3,
+      0,
+      "CLIP"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      5,
+      4,
+      0,
+      5,
+      3,
+      "LATENT"
+    ],
+    [
+      6,
+      5,
+      0,
+      8,
+      0,
+      "LATENT"
+    ],
+    [
+      7,
+      7,
+      0,
+      8,
+      1,
+      "VAE"
+    ],
+    [
+      8,
+      8,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      12,
+      0,
+      15,
+      0,
+      "WANVIDEOMODEL"
+    ],
+    [
+      13,
+      13,
+      0,
+      14,
+      0,
+      "WANVIDEOT5"
+    ],
+    [
+      14,
+      14,
+      0,
+      15,
+      2,
+      "WANVIDEOTEXTEMBEDS"
+    ],
+    [
+      15,
+      15,
+      0,
+      17,
+      1,
+      "LATENT"
+    ],
+    [
+      17,
+      17,
+      0,
+      19,
+      0,
+      "IMAGE"
+    ],
+    [
+      18,
+      18,
+      0,
+      19,
+      1,
+      "AUDIO"
+    ],
+    [
+      20,
+      6,
+      0,
+      5,
+      0,
+      "MODEL"
+    ],
+    [
+      16,
+      16,
+      0,
+      17,
+      0,
+      "WANVAE"
+    ],
+    [
+      11,
+      20,
+      0,
+      15,
+      1,
+      "WANVIDIMAGE_EMBEDS"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "FLUX Anime Character Generator",
+      "bounding": [
+        -20,
+        -20,
+        1900,
+        470
+      ],
+      "color": "#3d5a7a",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "WanVideo Animate Character",
+      "bounding": [
+        -796.7347880492055,
+        316.0525645307882,
+        2200,
+        620
+      ],
+      "color": "#5a3d7a",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Voice + Export",
+      "bounding": [
+        -20,
+        1150,
+        900,
+        320
+      ],
+      "color": "#3d7a5a",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.1167815779424797,
+      "offset": [
+        637.9311090155659,
+        -309.73455551225896
+      ]
+    },
+    "frontendVersion": "1.41.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
